@@ -1,0 +1,43 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    _:c0 rdf:type cao:StorageDataInform .
+    _:c0 cao:storageCapacity _:c1 .
+    _:c1 rdf:type ieso:Energy .
+    _:c1 ieso:hasDateTime "<[CAPACITY_MEASUREMENT_DATETIME]>"^^xsd:dateTime .
+    _:c1 ieso:hasMeasurementValue _:c2 .
+    _:c2 rdf:type ieso:MeasurementValue .
+    _:c2 ieso:hasUnitOfMeasure ieso:KilowattHour .
+    _:c2 ieso:hasLiteralValue "<[CAPACITY]>"^^rdfs:Literal .
+    _:c0 cao:storageCurrentCharge _:c3 .
+    _:c3 rdf:type ieso:Energy .
+    _:c3 ieso:hasDateTime "<[CHARGE_MEASUREMENT_DATETIME]>"^^xsd:dateTime .
+    _:c3 ieso:hasMeasurementValue _:c4 .
+    _:c4 rdf:type ieso:MeasurementValue .
+    _:c4 ieso:hasUnitOfMeasure ieso:KilowattHour .
+    _:c4 ieso:hasLiteralValue "<[CHARGE]>"^^rdfs:Literal .
+    _:c0 cao:storageEfficiency _:c5 .
+    _:c5 rdf:type ieso:Measurement .
+    _:c5 ieso:hasDateTime "<[EFFICIENCY_MEASUREMENT_DATETIME]>"^^xsd:dateTime .
+    _:c5 ieso:hasMeasurementValue _:c6 .
+    _:c6 rdf:type ieso:MeasurementValue .
+    _:c6 ieso:hasUnitOfMeasure ieso:Percent .
+    _:c6 ieso:hasLiteralValue "<[EFFICIENCY]>"^^rdfs:Literal .
+    _:c0 time:hasBeginning _:c7 .
+    _:c7 rdf:type time:Instant .
+    _:c7 time:inXSDDateTimeStamp "<[BEGINNING]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasEnd _:c8 .
+    _:c8 rdf:type time:Instant .
+    _:c8 time:inXSDDateTimeStamp "<[END]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasTime _:c9 .
+    _:c9 rdf:type time:Instant .
+    _:c9 time:inXSDDateTimeStamp ?dt .
+  }
+WHERE
+  { BIND(now() AS ?dt) }

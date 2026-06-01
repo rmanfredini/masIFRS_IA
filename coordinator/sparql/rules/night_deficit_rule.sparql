@@ -1,0 +1,37 @@
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+
+SELECT  ?dict
+WHERE
+  { ?rule     ieso:id               ?ruleId ;
+              ieso:rulePremiseCondition  ?condition ;
+              ieso:ruleTriggersAction  ?action .
+    ?condition  rdf:type            ieso:ComposedCondition ;
+              ieso:id               ?conditionId ;
+              ieso:description      ?conditionDescription
+    { SELECT  (GROUP_CONCAT(DISTINCT ?isTrue ; separator=', ') AS ?trigger)
+      WHERE
+        { ?condition  ieso:composedByCondition  ?c .
+          ?c        ieso:leftHandSideOperand  _:b0 .
+          _:b0      ieso:operandValue     _:b1 .
+          _:b1      ieso:hasLiteralValue  ?leftOperandValue .
+          ?c        ieso:hasOperator      _:b2 .
+          _:b2      ieso:id               ?operatorId .
+          ?c        ieso:rightHandSideOperand  _:b3 .
+          _:b3      ieso:operandValue     _:b4 .
+          _:b4      ieso:hasLiteralValue  ?rightOperandValue
+          BIND(if(( str(?operatorId) = "greater_than_operator" ), if(( strdt(str(?leftOperandValue), xsd:float) > strdt(str(?rightOperandValue), xsd:float) ), true, false), if(( str(?operatorId) = "equal_to_operator" ), if(( str(?leftOperandValue) = str(?rightOperandValue) ), true, false), "unknown")) AS ?isTrue)
+        }
+      GROUP BY ?condition
+    }
+    ?action  ieso:id               ?actionId ;
+             ieso:description      ?actionDescription ;
+             ieso:actionTriggeredByRule  ?rule ;
+             ieso:actuateOnDevice  ?device .
+    ?device  ieso:id               ?deviceId ;
+             ieso:isControlable    ?isControlable ;
+             ieso:hasState         _:b5 .
+    _:b5     ieso:stateStatus      ?stateStatus
+    BIND(if(( str(?trigger) = "true" ), concat("{\"action_id\":\"", str(?actionId), "\",\"action_description\":\"", str(?actionDescription), "\",\"action_triggered_by_rule\":{\"rule_id\":\"", str(?ruleId), "\",\"rule_premise_condition_description\":\"", str(?conditionDescription), "\"},\"actuate_on_device\":{\"device_id\":\"", str(?deviceId), "\",\"is_controlable\":", str(?isControlable), ",\"current_state\":\"", str(?stateStatus), "\",\"set_state\":\"", lcase(str(?actionDescription)), "\"}}"), "{}") AS ?dict)
+  }

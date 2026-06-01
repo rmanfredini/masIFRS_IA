@@ -1,0 +1,15 @@
+PREFIX  br:   <http://my.campus.org/business-rules#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+DELETE {
+  ?state ieso:stateStatus ?stateStatus .
+}
+INSERT {
+  ?state ieso:stateStatus <[STATE_STATUS]> .
+}
+WHERE
+  { ?device  ieso:id           "<[DEVICE_ID]>"^^rdfs:Literal ;
+             ieso:hasState     ?state .
+    ?state   ieso:stateStatus  ?stateStatus
+  }

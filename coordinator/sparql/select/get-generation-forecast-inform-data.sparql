@@ -1,0 +1,28 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?dict
+WHERE
+  { _:b0  rdf:type              cao:GenerationForecastInform ;
+          cao:generationForecast  _:b1 .
+    _:b1  rdf:type              ieso:Prediction ;
+          ieso:hasMeasurement   _:b2 .
+    _:b2  rdf:type              ieso:Measurement ;
+          ieso:hasDateTime      ?measurement_dt ;
+          ieso:hasMeasurementValue  _:b3 .
+    _:b3  rdf:type              ieso:MeasurementValue ;
+          ieso:hasUnitOfMeasure  ?generation_forecast_unit ;
+          ieso:hasLiteralValue  ?generation_forecast_value .
+    _:b0  time:hasBeginning     _:b4 .
+    _:b4  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?has_beggining .
+    _:b0  time:hasEnd           _:b5 .
+    _:b5  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?has_end .
+    _:b0  time:hasTime          _:b6 .
+    _:b6  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?dt
+    BIND(concat("{\"message_type\":\"GenerationForecastInform\",\"generation_forecast\":{\"value\":\"", str(?generation_forecast_value), "\",\"unit\":\"", str(?generation_forecast_unit), "\",\"timestamp\":\"", str(?measurement_dt), "\"},\"has_beggining\":\"", str(?has_beggining), "\",\"has_end\":\"", str(?has_end), "\",\"timestamp\":\"", str(?dt), "\"}") AS ?dict)
+  }

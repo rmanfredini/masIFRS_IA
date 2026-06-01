@@ -1,0 +1,11 @@
+{
+    "message_type": "GenerationForecastInform",
+    "generation_forecast": {
+        "value": "{GENERATION_FORECAST}",
+        "unit": "https://www.gecad.isep.ipp.pt/ieso/v1.1.0/KilowattHour",
+        "timestamp": "2025-07-15T19:44:59.707+01:00"
+    },
+    "has_beggining": "2025-07-15T19:45:00.000+01:00",
+    "has_end": "2025-07-15T20:40:00.000+01:00",
+    "timestamp": "2025-07-15T20:12:52.146+01:00"
+}

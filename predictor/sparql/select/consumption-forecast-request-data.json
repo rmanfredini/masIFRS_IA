@@ -1,0 +1,6 @@
+{
+    "message_type": "ConsumptionForecastRequest",
+    "has_beggining": "{START}",
+    "has_end": "{END}",
+    "timestamp": "2025-07-15T15:43:45.271+01:00"
+}

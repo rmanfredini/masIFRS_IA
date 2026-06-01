@@ -1,0 +1,6 @@
+{
+    "message_type": "DeviceControlRequest",
+    "control_device": "iri:DEVICE_IRI",
+    "control_action": "iri:ACTUATION_ACTION_IRI",
+    "timestamp": "2025-07-15T15:06:06.257+01:00"
+}

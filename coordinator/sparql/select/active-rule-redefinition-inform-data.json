@@ -1,0 +1,10 @@
+{
+    "message_type": "ActiveRuleRedefinitionInform",
+    "active_rule": "iri:RULE_IRI",
+    "new_action": {
+        "type": "https://www.gecad.isep.ipp.pt/ieso/v1.1.0/ActuationAction",
+        "description": "{NEW_ACTION}",
+        "actuate_on_device": "iri:DEVICE_IRI"
+    },
+    "timestamp": "2025-07-15T19:31:19.938+01:00"
+}
