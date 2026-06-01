@@ -1,0 +1,250 @@
+2026-02-05 14:26:28,854 - peak.bootloader - INFO - Creating agent from file
+2026-02-05 14:26:29,711 - peak.bootloader - INFO - Agent starting
+2026-02-05 14:27:54,863 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-05 14:27:54,880 - peak.bootloader - INFO - Agent stopped
+2026-02-05 14:34:28,434 - peak.bootloader - INFO - Creating agent from file
+2026-02-05 14:34:28,850 - peak.bootloader - INFO - Agent starting
+2026-02-05 14:35:53,957 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-05 14:35:53,987 - peak.bootloader - INFO - Agent stopped
+2026-02-09 13:52:54,913 - peak.bootloader - INFO - Creating agent from file
+2026-02-09 13:52:56,401 - peak.bootloader - INFO - Agent starting
+Exception ignored from cffi callback <function _query_cb at 0x106a57560>:
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/pycares/__init__.py", line 162, in _query_cb
+2026-02-09 13:54:21,567 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+    callback(result, status)
+  File "uvloop/loop.pyx", line 1290, in uvloop.loop.Loop.call_soon_threadsafe
+2026-02-09 13:54:21,610 - peak.bootloader - INFO - Agent stopped
+2026-02-09 13:57:44,216 - peak.bootloader - INFO - Creating agent from file
+2026-02-09 13:57:44,337 - peak.bootloader - INFO - Agent starting
+2026-02-09 13:59:09,367 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-09 13:59:09,375 - peak.bootloader - INFO - Agent stopped
+2026-02-09 14:02:23,125 - peak.bootloader - INFO - Creating agent from file
+2026-02-09 14:02:23,773 - peak.bootloader - INFO - Agent starting
+Exception ignored from cffi callback <function _query_cb at 0x104a43560>:
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/pycares/__init__.py", line 162, in _query_cb
+    callback(result, status)
+  File "uvloop/loop.pyx", line 1290, in uvloop.loop.Loop.call_soon_threadsafe
+2026-02-09 14:03:48,937 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-09 14:03:48,983 - peak.bootloader - INFO - Agent stopped
+2026-02-10 14:52:04,032 - peak.bootloader - INFO - Creating agent from file
+2026-02-10 14:52:04,892 - peak.bootloader - INFO - Agent starting
+2026-02-10 14:53:30,030 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-10 14:53:30,051 - peak.bootloader - INFO - Agent stopped
+2026-02-10 14:56:41,655 - peak.bootloader - INFO - Creating agent from file
+2026-02-10 14:56:42,661 - peak.bootloader - INFO - Agent starting
+2026-02-10 14:58:07,708 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-10 14:58:07,720 - peak.bootloader - INFO - Agent stopped
+2026-02-10 15:02:21,275 - peak.bootloader - INFO - Creating agent from file
+2026-02-10 15:02:21,454 - peak.bootloader - INFO - Agent starting
+2026-02-10 15:03:46,494 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-10 15:03:46,502 - peak.bootloader - INFO - Agent stopped
+2026-02-10 16:25:14,932 - peak.bootloader - INFO - Creating agent from file
+2026-02-10 16:25:16,031 - peak.bootloader - INFO - Agent starting
+Exception ignored from cffi callback <function _query_cb at 0x104057600>:
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/pycares/__init__.py", line 162, in _query_cb
+2026-02-10 16:26:41,228 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-10 16:26:41,266 - peak.bootloader - INFO - Agent stopped
+2026-02-12 13:31:35,748 - peak.bootloader - INFO - Creating agent from file
+2026-02-12 13:31:37,111 - peak.bootloader - INFO - Agent starting
+2026-02-12 13:35:57,443 - peak.bootloader - INFO - Creating agent from file
+2026-02-12 13:35:57,664 - peak.bootloader - INFO - Agent starting
+Exception ignored from cffi callback <function _query_cb at 0x104053600>:
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/pycares/__init__.py", line 162, in _query_cb
+2026-02-12 13:37:22,698 - peak.bootloader - ERROR - Stopping agent (reason: DisconnectedException)
+Traceback (most recent call last):
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/site-packages/peak/bootloader.py", line 99, in boot_agent
+    asyncio.run(agent_instance.start())
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.conda/envs/masIFRS/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 96, in start
+    return await self._async_start(auto_register=auto_register)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 119, in _async_start
+    await self._async_connect()
+  File "/Users/rmanfredini/.local/lib/python3.12/site-packages/spade/agent.py", line 195, in _async_connect
+    raise DisconnectedException(
+spade.agent.DisconnectedException: Error during the connection with the server
+2026-02-12 13:37:22,739 - peak.bootloader - INFO - Agent stopped
+2026-02-12 13:51:01,175 - peak.bootloader - INFO - Creating agent from file
+2026-02-12 13:51:01,354 - peak.bootloader - INFO - Agent starting
+2026-02-12 13:51:43,342 - peak.bootloader - INFO - Stopping agent (reason: KeyboardInterrupt)
+2026-02-12 13:51:43,348 - peak.bootloader - INFO - Agent stopped
+2026-02-12 13:52:19,211 - peak.bootloader - INFO - Creating agent from file
+2026-02-12 13:52:19,350 - peak.bootloader - INFO - Agent starting
+2026-02-12 13:53:00,233 - peak.bootloader - INFO - Stopping agent (reason: KeyboardInterrupt)
+2026-02-12 13:53:00,253 - peak.bootloader - INFO - Agent stopped
+2026-02-12 13:53:37,886 - peak.bootloader - INFO - Creating agent from file
+2026-02-12 13:53:38,035 - peak.bootloader - INFO - Agent starting
+2026-02-12 13:53:55,083 - peak.bootloader - INFO - Stopping agent (reason: KeyboardInterrupt)
+2026-02-12 13:53:55,085 - peak.bootloader - INFO - Agent stopped

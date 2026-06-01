@@ -1,0 +1,4 @@
+2026-02-18 15:13:41,930 - peak.bootloader - INFO - instanciating agent coordenador from file coordinator/coordinator.py
+2026-02-18 15:13:43,313 - peak.bootloader - INFO - starting agent coordenador
+2026-02-18 18:51:09,475 - peak.bootloader - INFO - agent coordenador terminated (KeyboardInterrupt)
+2026-02-18 18:51:09,477 - peak.__main__ - INFO - PEAK terminated
