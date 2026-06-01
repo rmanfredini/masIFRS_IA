@@ -1,0 +1,2 @@
+# masIFRS
+Multi-agent system for controlling photovoltaic power plants using ontology
