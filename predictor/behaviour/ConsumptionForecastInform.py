@@ -26,7 +26,7 @@ class ConsumptionForecastInform(OneShotBehaviour):
 
   async def run(self):
     # Get sparql select file 
-    filepath = os.path.abspath(os.path.join("agent", "predictor", "sparql", "select", "get-consumption-forecast-request-data.sparql"))
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "select", "get-consumption-forecast-request-data.sparql"))
     # DEBUG: print(filepath)
 
     # if filepath is a file
@@ -47,7 +47,7 @@ class ConsumptionForecastInform(OneShotBehaviour):
 
         if messageData["message_type"] == "ConsumptionForecastRequest":
           # Get sparql construct file
-          filepath = os.path.abspath(os.path.join("agent", "predictor", "sparql", "construct", "consumption-forecast-inform.sparql"))
+          filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "construct", "consumption-forecast-inform.sparql"))
           # DEBUG: print(filepath)
 
           # if filepath is a file

@@ -105,7 +105,7 @@ class GraphDBUpdater(OneShotBehaviour):
     
     def _load_update_sparql_query(self, filename):
         """Carrega query SPARQL UPDATE"""
-        filepath = os.path.abspath(os.path.join("agent", "coordinator", "sparql", "update", filename))
+        filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "update", filename))
         
         try:
             if os.path.exists(filepath):

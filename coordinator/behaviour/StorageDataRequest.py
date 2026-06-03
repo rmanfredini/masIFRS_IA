@@ -10,7 +10,7 @@ class StorageDataRequest(OneShotBehaviour):
 
   async def run(self):
     # Get sparql construct file
-    filepath = os.path.abspath(os.path.join("agent", "coordinator", "sparql", "construct", "storage-data-request.sparql"))
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "construct", "storage-data-request.sparql"))
     # DEBUG: print(filepath)
 
     # if filepath is a file

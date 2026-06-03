@@ -11,7 +11,7 @@ class CurrentConsumptionRequest(OneShotBehaviour):
 
   async def run(self):
     # Get sparql construct file
-    filepath = os.path.abspath(os.path.join("agent", "coordinator", "sparql", "construct", "current-consumption-request.sparql"))
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "construct", "current-consumption-request.sparql"))
     #print("DEBUG: {}".format(filepath))
 
     # if filepath is a file

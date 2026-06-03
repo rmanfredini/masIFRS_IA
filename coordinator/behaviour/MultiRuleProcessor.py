@@ -19,7 +19,7 @@ class MultiRuleProcessor(OneShotBehaviour):
     
     def __init__(self):
         super().__init__()
-        self.rules_directory = os.path.abspath(os.path.join("agent", "coordinator", "sparql", "rules"))
+        self.rules_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "rules"))
         self.sparql_cache = {}
         self.executed_count = 0
         self.last_actions = {}  # Dicionário com ações por regra

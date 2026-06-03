@@ -1,0 +1,101 @@
+@startuml mas-ifrs-sequence
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam maxmessagesize 120
+skinparam sequenceParticipant underline
+
+title MAS-IFRS — Diagrama de Sequência de Mensagens entre Agentes
+
+participant "Meter\nAgent" as M
+participant "Predictor\nAgent" as P
+participant "Coordinator\nAgent" as C
+participant "GraphDB\n(SPARQL)" as G
+database "PostgreSQL" as DB
+
+== Fase 1: Inicialização ==
+
+M -> C : INFORM [agent-alive-notification]\n{agent_type: "meter", status: "online"}
+activate C
+C -> C : StartAgent registra meter como online
+
+P -> C : INFORM [agent-alive-notification]\n{agent_type: "predictor", status: "online"}
+C -> C : StartAgent registra predictor como online\n→ ambos ativos → lança behaviours operacionais
+deactivate C
+
+== Fase 2: Coleta de Dados Correntes ==
+
+C -> M : REQUEST [current-consumption-request]\nRDF/Turtle (ontology: cao, language: turtle)
+activate M
+M -> DB : SELECT valor_kw FROM consumos\nWHERE campus_id = ? ORDER BY timestamp DESC LIMIT 1
+DB --> M : valor consumo atual (kW)
+M -> C : INFORM [current-consumption-inform]\nRDF/Turtle com consumo atual
+deactivate M
+activate C
+C -> C : ConsumptionInformProcessor\narmazena agent.ultimo_consumo
+deactivate C
+
+C -> M : REQUEST [current-generation-request]\nRDF/Turtle (ontology: cao, language: turtle)
+activate M
+M -> DB : SELECT SUM(potenciagerada_kw) FROM geracoes\nWHERE campus_id = ? AND timestamp = latest
+DB --> M : soma da geração atual (kW)
+M -> C : INFORM [current-generation-inform]\nRDF/Turtle com geração atual
+deactivate M
+activate C
+C -> C : GenerationInformProcessor\narmazena agent.ultima_geracao
+deactivate C
+
+== Fase 3: Previsões com ML (Amazon Chronos) ==
+
+C -> P : REQUEST [generation-forecast-request]\nRDF/Turtle (ontology: cao, language: turtle)
+activate P
+P -> DB : SELECT timestamp, potenciagerada_kw\nFROM geracoes WHERE campus_id = ? ORDER BY timestamp
+DB --> P : série histórica de geração
+P -> P : ChronosForecaster.prever_geracao()\namazon/chronos-t5-large (horizonte: 1h)
+P -> C : INFORM [generation-forecast-inform]\nRDF/Turtle com previsão de geração
+deactivate P
+activate C
+C -> C : GenerationForecastInformProcessor\narmazena agent.previsao_geracao
+deactivate C
+
+C -> P : REQUEST [consumption-forecast-request]\nRDF/Turtle (ontology: cao, language: turtle)
+activate P
+P -> DB : SELECT timestamp, valor_kw FROM consumos\n+ potenciagerada_kw FROM geracoes WHERE campus_id = ?
+DB --> P : séries históricas de consumo e geração
+P -> P : ChronosForecaster.prever_consumo()\namazon/chronos-t5-large (horizonte: 4h)
+P -> C : INFORM [consumption-forecast-inform]\nRDF/Turtle com previsão de consumo
+deactivate P
+activate C
+C -> C : ConsumptionForecastInformProcessor\narmazena agent.ultima_previsao_consumo
+deactivate C
+
+== Fase 4: Execução de Regras e Atualização ==
+
+C -> G : SPARQL SELECT [generation-excess-rule.sparql]\nverifica se geração > consumo
+activate G
+G --> C : ações identificadas\n(ex: {device: BATT_001, set_state: charging})
+deactivate G
+
+C -> G : SPARQL SELECT [night_deficit_rule.sparql]\nverifica déficit noturno de consumo
+activate G
+G --> C : ações identificadas
+deactivate G
+
+activate C
+C -> C : MultiRuleProcessor extrai e registra ações\n(modo simulação — sem envio ao Actuator)
+deactivate C
+
+C -> G : SPARQL UPDATE [update-forecast-data.sparql]\nGraphDBUpdater persiste previsões no grafo
+activate G
+G --> C : confirmação de atualização
+deactivate G
+
+== Nota: Componentes não implementados ==
+
+note over M, G
+  <b>Actuator Agent</b>: declarado mas não funcional (erros de sintaxe)
+  <b>Director Agent</b>: declarado mas completamente vazio
+  <b>StorageDataRequest</b>: behaviour comentado (interação com bateria inativa)
+end note
+
+@enduml

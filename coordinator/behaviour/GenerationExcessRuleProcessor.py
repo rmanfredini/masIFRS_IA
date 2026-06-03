@@ -76,7 +76,7 @@ class GenerationExcessRuleProcessor(OneShotBehaviour):
         if self.sparql_filename in self.sparql_cache:
             return self.sparql_cache[self.sparql_filename]
         
-        filepath = os.path.abspath(os.path.join("agent", "coordinator", "sparql", "rules", self.sparql_filename))
+        filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "rules", self.sparql_filename))
         
         try:
             if os.path.isfile(filepath):

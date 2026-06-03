@@ -4,15 +4,16 @@ defaults:
   log_level: DEBUG
   # Desabilitar TLS para desenvolvimento local
   security: none
+  log_folder: /tmp/mas-ifrs-logs
 
 agents:
   actuator:
-    file: agent/actuator/actuator.py
+    file: actuator/actuator.py
   coordinator:
-    file: agent/coordinator/coordinator.py
+    file: coordinator/coordinator.py
   #director:
-  #  file: agent/director/director.py
+  #  file: director/director.py
   meter:
-    file: agent/meter/meter.py
+    file: meter/meter.py
   predictor:
-    file: agent/predictor/predictor.py  
+    file: predictor/predictor.py  

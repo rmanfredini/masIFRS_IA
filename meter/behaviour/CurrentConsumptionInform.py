@@ -25,7 +25,7 @@ class CurrentConsumptionInform(OneShotBehaviour):
 
   async def run(self):
     # Get sparql select file 
-    filepath = os.path.abspath(os.path.join("agent", "meter", "sparql", "select", "get-current-consumption-request-data.sparql"))
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "select", "get-current-consumption-request-data.sparql"))
     # DEBUG: print(filepath)
 
     # if filepath is a file
@@ -46,7 +46,7 @@ class CurrentConsumptionInform(OneShotBehaviour):
 
         if messageData["message_type"] == "CurrentConsumptionRequest":
           # Get sparql construct file
-          filepath = os.path.abspath(os.path.join("agent", "meter", "sparql", "construct", "current-consumption-inform.sparql"))
+          filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "construct", "current-consumption-inform.sparql"))
           # DEBUG: print(filepath)
 
           # if filepath is a file

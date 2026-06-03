@@ -24,7 +24,7 @@ class CurrentGenerationInform(OneShotBehaviour):
 
   async def run(self):
     # Get sparql select file 
-    filepath = os.path.abspath(os.path.join("agent", "meter", "sparql", "select", "get-current-generation-request-data.sparql"))
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "select", "get-current-generation-request-data.sparql"))
     # DEBUG: print(filepath)
 
     # if filepath is a file
@@ -45,7 +45,7 @@ class CurrentGenerationInform(OneShotBehaviour):
 
         if messageData["message_type"] == "CurrentGenerationRequest":
           # Get sparql construct file
-          filepath = os.path.abspath(os.path.join("agent", "meter", "sparql", "construct", "current-generation-inform.sparql"))
+          filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sparql", "construct", "current-generation-inform.sparql"))
           # DEBUG: print(filepath)
 
           # if filepath is a file

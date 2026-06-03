@@ -45,7 +45,7 @@ class ChronosForecaster:
                 FROM consumos c
                 LEFT JOIN geracoes g ON c.timestamp = g.timestamp 
                     AND c.campus_id = g.campus_id
-                WHERE c.campus_id = {self.campus_id}
+                WHERE c.campus_id = {self.campus_id}  
                 ORDER BY c.timestamp
             """
             self.ylabel = "Consumo + Geração (kW)"
@@ -55,7 +55,7 @@ class ChronosForecaster:
             self.sql_query = f"""
                 SELECT timestamp, potenciagerada_kw AS valor
                 FROM geracoes
-                WHERE campus_id = {self.campus_id}
+                WHERE campus_id = {self.campus_id}  
                 ORDER BY timestamp
             """
             self.ylabel = "Potência Gerada (W)"
@@ -159,13 +159,11 @@ def main():
     forecast_df, error = forecaster.run_forecast(save_plot=True, plot_filename="forecast.png")
     print(forecast_df)
     print("MAPE:", error)
+    forecaster = ChronosForecaster(mode='geracao', campus_id=1, forecast_horizon=1, plotar=True)
+    forecast_df, error = forecaster.run_forecast(save_plot=True, plot_filename="forecast.png")
+    print(forecast_df)
+    print("MAPE:", error)
 
     
 if __name__ == "__main__":
     main()
-# Exemplo de uso, em outro script:
-# from chronosTimeSeries import ChronosForecaster
-# forecaster = ChronosForecaster(mode='consumo', campus_id=1, forecast_horizon=4)
-# forecast_df, error = forecaster.run_forecast(save_plot=True, plot_filename="consumo_forecast.png")
-# print(forecast_df)
-# print("MAPE:", error)
