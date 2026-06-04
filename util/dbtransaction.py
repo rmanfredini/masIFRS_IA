@@ -1,6 +1,7 @@
 import json
 import os
 import psycopg2
+import logging
 from dotenv import load_dotenv
 from datetime import datetime
 
@@ -15,11 +16,23 @@ POSTGRESQL_DATABASE=os.getenv('POSTGRESQL_DATABASE')
 SERVIDOR_NOMES=os.getenv('SERVIDOR_NOMES')
 SERVIDOR_NOMES_PORTA=os.getenv('SERVIDOR_NOMES_PORTA')
 
+# Configurar logger do peak.database
+logger = logging.getLogger("peak.database")
+logger.setLevel(logging.INFO)
+
 class dbtransaction:
 
     def __init__(self):
         self.db_connection = None
         self.conectar_bd()
+
+    def _log_interaction(self, query, params, result=None, error=None):
+        escaped_query = " ".join(query.split())
+        status = "SUCCESS" if not error else "ERROR"
+        details = str(result) if not error else str(error)
+        logger.info(
+            f"[DB_MSG] PGSQL | Query: {escaped_query} | Params: {params} | Status: {status} | Result: {details}"
+        )
 
     def conectar_bd(self):
         """Conecta ao banco de dados PostgreSQL"""
@@ -32,18 +45,22 @@ class dbtransaction:
                 port=SERVIDOR_POSTGRESQL_PORTA
             )
             #print("{} - [{}] - Database connection established. . . .".format(datetime.now(), "dbtransaction"))
+            logger.info("[DB_MSG] PGSQL | Action: CONNECT | Status: SUCCESS")
         except Exception as e:
             print(f"Database connection error: {e}")
+            logger.error(f"[DB_MSG] PGSQL | Action: CONNECT | Status: ERROR | Result: {e}")
     
     def desconectar(self):
         """Fecha conexão com o banco"""
         if self.db_connection:
             self.db_connection.close()
+            logger.info("[DB_MSG] PGSQL | Action: DISCONNECT | Status: SUCCESS")
 
     def obter_consumo_atual(self):
         """
         Obtém a última medição de consumo do campus
         """
+        query = "N/A"
         try:                
             if not self.db_connection or self.db_connection.closed:
                 self.conectar_bd()
@@ -65,18 +82,23 @@ class dbtransaction:
             self.desconectar()
             
             if resultado:
-                return float(resultado[0])
+                val = float(resultado[0])
+                self._log_interaction(query, (CAMPUS_ID,), val)
+                return val
             else:
+                self._log_interaction(query, (CAMPUS_ID,), 0)
                 return 0
                 
         except Exception as e:
             print(f"Error obtaining current consumption: {e}")
+            self._log_interaction(query, (CAMPUS_ID,), error=e)
             return 0
 
     def obter_geracao_atual(self):
         """
         Obtém a soma das últimas medições de geração por dispositivo no campus
         """
+        query = "N/A"
         try:
             campus_id = CAMPUS_ID
             if not campus_id:
@@ -106,18 +128,23 @@ class dbtransaction:
             resultado = cursor.fetchone()
             cursor.close()
             if resultado:
-                return float(resultado[0])
+                val = float(resultado[0])
+                self._log_interaction(query, (campus_id,), val)
+                return val
             else:
+                self._log_interaction(query, (campus_id,), 0)
                 return 0
 
         except Exception as e:
             print(f"Error obtaining current generation: {e}")
+            self._log_interaction(query, (CAMPUS_ID,), error=e)
             return 0
 
     def obter_capacidade_armazenamento(self):
         """
         Obtém a capacidade total de armazenamento em kWh
         """
+        query = "N/A"
         try:
             if not self.db_connection or self.db_connection.closed:
                 self.conectar_bd()
@@ -135,18 +162,23 @@ class dbtransaction:
             resultado = cursor.fetchone()
             cursor.close()
             if resultado:
-                return float(resultado[0])
+                val = float(resultado[0])
+                self._log_interaction(query, (CAMPUS_ID,), val)
+                return val
             else:
+                self._log_interaction(query, (CAMPUS_ID,), 100.0)
                 return 100.0  # Valor padrão
 
         except Exception as e:
             print(f"Error obtaining storage capacity: {e}")
+            self._log_interaction(query, (CAMPUS_ID,), error=e)
             return 100.0  # Valor padrão
 
     def obter_carga_armazenamento(self):
         """
         Obtém a carga atual de armazenamento em percentual
         """
+        query = "N/A"
         try:
             if not self.db_connection or self.db_connection.closed:
                 self.conectar_bd()
@@ -164,18 +196,23 @@ class dbtransaction:
             resultado = cursor.fetchone()
             cursor.close()
             if resultado:
-                return float(resultado[0])
+                val = float(resultado[0])
+                self._log_interaction(query, (CAMPUS_ID,), val)
+                return val
             else:
+                self._log_interaction(query, (CAMPUS_ID,), 75.0)
                 return 75.0  # Valor padrão
 
         except Exception as e:
             print(f"Error obtaining storage charge: {e}")
+            self._log_interaction(query, (CAMPUS_ID,), error=e)
             return 75.0  # Valor padrão
 
     def obter_eficiencia_armazenamento(self):
         """
         Obtém a eficiência do sistema de armazenamento em percentual
         """
+        query = "N/A"
         try:
             if not self.db_connection or self.db_connection.closed:
                 self.conectar_bd()
@@ -193,10 +230,14 @@ class dbtransaction:
             resultado = cursor.fetchone()
             cursor.close()
             if resultado:
-                return float(resultado[0])
+                val = float(resultado[0])
+                self._log_interaction(query, (CAMPUS_ID,), val)
+                return val
             else:
+                self._log_interaction(query, (CAMPUS_ID,), 90.0)
                 return 90.0  # Valor padrão
 
         except Exception as e:
             print(f"Error obtaining storage efficiency: {e}")
+            self._log_interaction(query, (CAMPUS_ID,), error=e)
             return 90.0  # Valor padrão

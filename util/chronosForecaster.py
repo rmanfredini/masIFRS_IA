@@ -4,8 +4,14 @@ import numpy as np
 import pandas as pd
 import torch
 import matplotlib.pyplot as plt
+import logging
 from dotenv import load_dotenv
 from chronos import ChronosPipeline
+
+# Configurar logger do peak.database
+logger = logging.getLogger("peak.database")
+logger.setLevel(logging.INFO)
+
 
 class ChronosForecaster:
     """
@@ -70,10 +76,22 @@ class ChronosForecaster:
 
     def load_data(self):
         """Carrega dados do banco e retorna DataFrame com colunas [timestamp, valor]."""
-        conn = psycopg2.connect(**self.db_config)
-        df = pd.read_sql(self.sql_query, conn)
-        conn.close()
-        return df
+        try:
+            conn = psycopg2.connect(**self.db_config)
+            df = pd.read_sql(self.sql_query, conn)
+            conn.close()
+            
+            escaped_query = " ".join(self.sql_query.split())
+            logger.info(
+                f"[DB_MSG] PGSQL | Query: {escaped_query} | Params: None | Status: SUCCESS | Result: {len(df)} rows"
+            )
+            return df
+        except Exception as e:
+            escaped_query = " ".join(self.sql_query.split())
+            logger.error(
+                f"[DB_MSG] PGSQL | Query: {escaped_query} | Params: None | Status: ERROR | Result: {e}"
+            )
+            raise e
 
     def run_forecast(self, save_plot=False, plot_filename="chronos_forecast.png"):
         """

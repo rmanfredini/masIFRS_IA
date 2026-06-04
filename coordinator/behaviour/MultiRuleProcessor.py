@@ -8,6 +8,12 @@ import requests
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 import glob
+import logging
+
+# Configurar logger do peak.database
+logger = logging.getLogger("peak.database")
+logger.setLevel(logging.INFO)
+
 
 load_dotenv()
 
@@ -143,6 +149,7 @@ class MultiRuleProcessor(OneShotBehaviour):
     
     async def _execute_sparql_query(self, query, rule_name):
         """Executa uma query SPARQL no GraphDB remoto"""
+        graphdb_url = "N/A"
         try:
             # Obter credenciais do GraphDB
             graphdb_url = os.getenv('GRAPHDB_URL')
@@ -168,6 +175,13 @@ class MultiRuleProcessor(OneShotBehaviour):
                 timeout=30
             )
             
+            escaped_query = query.replace("\n", " [NL] ")
+            status = "SUCCESS" if response.status_code == 200 else "ERROR"
+            result_details = response.text.replace("\n", " [NL] ") if response.status_code == 200 else f"Status {response.status_code}: {response.text.replace(chr(10), ' [NL] ')}"
+            logger.info(
+                f"[DB_MSG] GRAPHDB | URL: {graphdb_url} | Action: QUERY (Rule: {rule_name}) | Query: {escaped_query} | Status: {status} | Result: {result_details}"
+            )
+            
             if response.status_code == 200:
                 result_data = response.json()
                 print(f"✅ [{self.agent.name}] Query {rule_name} executada com sucesso")
@@ -179,15 +193,23 @@ class MultiRuleProcessor(OneShotBehaviour):
                 return None
                 
         except requests.exceptions.ConnectionError as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url} | Action: QUERY (Rule: {rule_name}) | Query: {escaped_query} | Status: ERROR | Result: ConnectionError: {e}")
             print(f"⚠️ [{self.agent.name}] Servidor GraphDB indisponível para {rule_name}: {e}")
             return None
         except requests.exceptions.Timeout as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url} | Action: QUERY (Rule: {rule_name}) | Query: {escaped_query} | Status: ERROR | Result: Timeout: {e}")
             print(f"⚠️ [{self.agent.name}] Timeout na requisição GraphDB para {rule_name}: {e}")
             return None
         except requests.exceptions.RequestException as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url} | Action: QUERY (Rule: {rule_name}) | Query: {escaped_query} | Status: ERROR | Result: RequestException: {e}")
             print(f"❌ [{self.agent.name}] Erro de rede ao consultar GraphDB para {rule_name}: {e}")
             return None
         except Exception as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url} | Action: QUERY (Rule: {rule_name}) | Query: {escaped_query} | Status: ERROR | Result: Exception: {e}")
             print(f"❌ [{self.agent.name}] Erro ao executar query {rule_name} no GraphDB: {e}")
             return None
     

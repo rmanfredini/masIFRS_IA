@@ -1,3 +1,8 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import util.agent_patch
+
 from datetime import datetime
 from peak import Agent, Message
 import os

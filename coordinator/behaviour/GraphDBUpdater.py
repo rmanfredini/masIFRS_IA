@@ -5,6 +5,12 @@ import requests
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 import traceback
+import logging
+
+# Configurar logger do peak.database
+logger = logging.getLogger("peak.database")
+logger.setLevel(logging.INFO)
+
 
 load_dotenv()
 
@@ -40,6 +46,8 @@ class GraphDBUpdater(OneShotBehaviour):
     
     async def _update_forecast_data(self):
         """Atualiza dados de forecast no GraphDB"""
+        query = "N/A"
+        graphdb_url = "N/A"
         try:
             # Obter credenciais do GraphDB do arquivo .env
             graphdb_url = os.getenv('GRAPHDB_URL')
@@ -80,6 +88,13 @@ class GraphDBUpdater(OneShotBehaviour):
                 timeout=30
             )
             
+            escaped_query = query.replace("\n", " [NL] ")
+            status = "SUCCESS" if response.status_code == 204 else "ERROR"
+            result_details = f"Status {response.status_code}: {response.text.replace(chr(10), ' [NL] ')}"
+            logger.info(
+                f"[DB_MSG] GRAPHDB | URL: {graphdb_url}/statements | Action: UPDATE | Query: {escaped_query} | Status: {status} | Result: {result_details}"
+            )
+            
             if response.status_code == 204:  # 204 No Content = sucesso em SPARQL UPDATE
                 #print(f"✅ [{self.agent.name}] GraphDB updated successfully")
                 return True
@@ -89,16 +104,24 @@ class GraphDBUpdater(OneShotBehaviour):
                 return False
                 
         except requests.exceptions.ConnectionError as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url}/statements | Action: UPDATE | Query: {escaped_query} | Status: ERROR | Result: ConnectionError: {e}")
             print(f"⚠️ [{self.agent.name}] GraphDB server unavailable: {e}")
             print(f"   💡 Consider checking if GraphDB server is running")
             return False
         except requests.exceptions.Timeout as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url}/statements | Action: UPDATE | Query: {escaped_query} | Status: ERROR | Result: Timeout: {e}")
             print(f"⚠️ [{self.agent.name}] GraphDB request timeout: {e}")
             return False
         except requests.exceptions.RequestException as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url}/statements | Action: UPDATE | Query: {escaped_query} | Status: ERROR | Result: RequestException: {e}")
             print(f"❌ [{self.agent.name}] Network error updating GraphDB: {e}")
             return False
         except Exception as e:
+            escaped_query = query.replace("\n", " [NL] ")
+            logger.error(f"[DB_MSG] GRAPHDB | URL: {graphdb_url}/statements | Action: UPDATE | Query: {escaped_query} | Status: ERROR | Result: Exception: {e}")
             print(f"❌ [{self.agent.name}] Error updating GraphDB: {e}")
             traceback.print_exc()
             return False
