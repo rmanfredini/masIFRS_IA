@@ -207,7 +207,7 @@ class MessageServer(CyclicBehaviour):
       elif msg.thread == "consumption-forecast-inform":
         self.agent.add_behaviour(ConsumptionForecastInformProcessor(msg))
       elif msg.thread == "shutdown":
-        self.agent.stop()
+        self.agent.stop() 
       else:
         print(f"⚠️ [{self.agent.name}] Unhandled message thread: '{msg.thread}' from {msg.sender}")
         print(f"   📄 Message content: {msg.body[:100] if msg.body else 'empty'}...")
