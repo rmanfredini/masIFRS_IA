@@ -5,7 +5,7 @@ from datetime import datetime
 from peak import Message, OneShotBehaviour
 import sys
 from dotenv import load_dotenv
-util_dir = os.path.join(os.path.dirname(__file__), 'mas-ifrs', 'util')
+util_dir = os.path.join(os.path.dirname(__file__), 'masIFRS_IA', 'util')
 sys.path.append(util_dir)
 from util.chronosForecaster import ChronosForecaster
 load_dotenv()

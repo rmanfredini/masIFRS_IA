@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 CAMPUS_ID = os.getenv('CAMPUS_ID')
 
-util_dir = os.path.join(os.path.dirname(__file__), 'mas-ifrs', 'util')
+util_dir = os.path.join(os.path.dirname(__file__), 'masIFRS_IA', 'util')
 sys.path.append(util_dir)
 from util.chronosForecaster import ChronosForecaster
 

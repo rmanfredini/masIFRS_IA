@@ -11,8 +11,8 @@ agents:
     file: actuator/actuator.py
   coordinator:
     file: coordinator/coordinator.py
-  #director:
-  #  file: director/director.py
+  director:
+    file: director/director.py
   meter:
     file: meter/meter.py
   predictor:

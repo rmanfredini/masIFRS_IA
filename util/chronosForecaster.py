@@ -102,9 +102,23 @@ class ChronosForecaster:
         """
         df = self.load_data()
 
-        # Converter timestamp e extrair série
-        dates = pd.to_datetime(df["timestamp"], errors='coerce')
+        # Converter timestamp para UTC e remover tzinfo para compatibilidade com pandas
+        dates = pd.to_datetime(df["timestamp"], utc=True, errors='coerce').dt.tz_localize(None)
         series = df["valor"].values
+
+        # Remover linhas com timestamp inválido (NaT)
+        valid_mask = ~dates.isna()
+        n_invalid = (~valid_mask).sum()
+        if n_invalid > 0:
+            logger.warning(f"[ChronosForecaster] {n_invalid} registro(s) com timestamp inválido (NaT) removidos antes da previsão.")
+        dates = dates[valid_mask].reset_index(drop=True)
+        series = series[valid_mask]
+
+        if len(dates) == 0:
+            raise ValueError(
+                f"[ChronosForecaster] Nenhum dado válido encontrado no banco para mode='{self.mode}', "
+                f"campus_id={self.campus_id}. Verifique se há registros com timestamps válidos na tabela."
+            )
 
         # Carregar  modelo
         pipeline = ChronosPipeline.from_pretrained(
@@ -126,6 +140,11 @@ class ChronosForecaster:
 
         # Criar datas para a previsão
         last_date = dates.iloc[-1]
+        if pd.isna(last_date):
+            raise ValueError(
+                f"[ChronosForecaster] Último timestamp é NaT para mode='{self.mode}'. "
+                "Não é possível calcular datas futuras."
+            )
         forecast_dates  = pd.date_range(
             start=last_date + pd.Timedelta(hours=1), 
             periods=self.forecast_horizon, 

@@ -206,6 +206,13 @@ class MessageServer(CyclicBehaviour):
         self.agent.add_behaviour(GenerationForecastInformProcessor(msg))
       elif msg.thread == "consumption-forecast-inform":
         self.agent.add_behaviour(ConsumptionForecastInformProcessor(msg))
+      elif msg.thread == "active-rule-agree":
+        # Director aprovou a ação da regra — ciclo de atuação pode prosseguir
+        print(f"✅ [{self.agent.name}] ActiveRuleAgree recebido do Director (de {msg.sender}). Regra aprovada.")
+        # TODO: acionar DeviceControlRequest / actuator quando implementado
+      elif msg.thread == "active-rule-refuse":
+        # Director recusou a ação — cancelar ciclo de atuação
+        print(f"🚫 [{self.agent.name}] ActiveRuleRefuse recebido do Director (de {msg.sender}). Ação cancelada por política global.")
       elif msg.thread == "shutdown":
         self.agent.stop() 
       else:
