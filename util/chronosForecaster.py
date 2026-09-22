@@ -1,5 +1,5 @@
 import os
-import psycopg2
+from sqlalchemy import create_engine
 import numpy as np
 import pandas as pd
 import torch
@@ -76,18 +76,23 @@ class ChronosForecaster:
 
     def load_data(self):
         """Carrega dados do banco e retorna DataFrame com colunas [timestamp, valor]."""
+        escaped_query = " ".join(self.sql_query.split())
         try:
-            conn = psycopg2.connect(**self.db_config)
-            df = pd.read_sql(self.sql_query, conn)
-            conn.close()
-            
-            escaped_query = " ".join(self.sql_query.split())
+            # Usar SQLAlchemy engine — suportado oficialmente pelo pandas.read_sql
+            db = self.db_config
+            url = (
+                f"postgresql+psycopg2://{db['user']}:{db['password']}"
+                f"@{db['host']}:{db['port']}/{db['database']}"
+            )
+            engine = create_engine(url)
+            with engine.connect() as conn:
+                df = pd.read_sql(self.sql_query, conn)
+
             logger.info(
                 f"[DB_MSG] PGSQL | Query: {escaped_query} | Params: None | Status: SUCCESS | Result: {len(df)} rows"
             )
             return df
         except Exception as e:
-            escaped_query = " ".join(self.sql_query.split())
             logger.error(
                 f"[DB_MSG] PGSQL | Query: {escaped_query} | Params: None | Status: ERROR | Result: {e}"
             )
