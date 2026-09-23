@@ -28,31 +28,31 @@ KNOWN_AGENTS = {
         "label": "Coordinator",
         "icon": "🧠",
         "color": "#6366f1",
-        "role": "Orquestrador central do MAS",
+        "role": "MAS central orchestrator",
     },
     "meter": {
         "label": "Meter",
         "icon": "⚡",
-        "color": "#f59e0b",
-        "role": "Coleta dados de consumo e geração",
+        "color": "#f59e0b", 
+        "role": "Consumption and generation data collector",
     },
     "predictor": {
         "label": "Predictor",
         "icon": "🔮",
         "color": "#10b981",
-        "role": "Previsão de consumo e geração",
+        "role": "Consumption and generation forecast",
     },
     "actuator": {
         "label": "Actuator",
         "icon": "🤖",
         "color": "#ef4444",
-        "role": "Executa ações de controle",
+        "role": "Execute control actions",
     },
     "director": {
         "label": "Director",
         "icon": "📋",
         "color": "#8b5cf6",
-        "role": "Gerencia políticas do campus",
+        "role": "Manages campus policies",
     },
 }
 

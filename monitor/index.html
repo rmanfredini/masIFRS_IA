@@ -611,38 +611,38 @@
     <!-- Stats Bar -->
     <div class="stats-bar" id="statsBar">
       <div class="stat-card">
-        <div class="stat-label">Agentes Online</div>
+        <div class="stat-label">Online Agents</div>
         <div class="stat-value stat-online" id="statOnline">–</div>
         <div class="stat-sub">de <span id="statTotal">–</span> configurados</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Erros Ativos</div>
+        <div class="stat-label">Active Errors</div>
         <div class="stat-value stat-error" id="statErrors">–</div>
         <div class="stat-sub">nos últimos logs</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Linhas de Log</div>
+        <div class="stat-label">Log Lines</div>
         <div class="stat-value stat-accent" id="statLogLines">–</div>
-        <div class="stat-sub">total acumulado</div>
+        <div class="stat-sub">acumulated total</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Arquivos de Log</div>
+        <div class="stat-label">Log Files</div>
         <div class="stat-value stat-cyan" id="statLogFiles">–</div>
-        <div class="stat-sub">detectados</div>
+        <div class="stat-sub">detected</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Última Atualização</div>
+        <div class="stat-label">Last Update</div>
         <div class="stat-value" id="statTime" style="font-size:16px;padding-top:4px;">–</div>
-        <div class="stat-sub">tempo real via SSE</div>
+        <div class="stat-sub">real time via SSE</div>
       </div>
     </div>
 
     <!-- Agents Section -->
     <div>
-      <p class="section-title" style="margin-bottom:14px">Status dos Agentes</p>
+      <p class="section-title" style="margin-bottom:14px">Agents Status</p>
       <div class="agents-grid" id="agentsGrid">
         <!-- preenchido via JS -->
-        <div style="color:var(--text-muted);font-size:13px;padding:20px">Carregando agentes…</div>
+        <div style="color:var(--text-muted);font-size:13px;padding:20px">Loading agents…</div>
       </div>
     </div>
 
@@ -655,7 +655,7 @@
           <span class="logs-title" id="logsTitle">📋 Feed de Logs — Todos os Agentes</span>
           <div class="filter-tabs" id="levelTabs">
             <button class="filter-tab active" onclick="setLevelFilter('ALL', this)" id="tabAll">ALL</button>
-            <button class="filter-tab" onclick="setLevelFilter('SEMANTIC', this)">SEMÂNTICA</button>
+            <button class="filter-tab" onclick="setLevelFilter('SEMANTIC', this)">SEMANTIC</button>
             <button class="filter-tab" onclick="setLevelFilter('DATABASE', this)">BD</button>
             <button class="filter-tab" onclick="setLevelFilter('ERROR', this)">ERR</button>
             <button class="filter-tab" onclick="setLevelFilter('WARNING', this)">WARN</button>
@@ -876,7 +876,7 @@ function renderAgents() {
         <div class="agent-name">${meta.icon} ${agent.label || agent.id}</div>
         <div class="agent-role">${agent.role || ''}</div>
         <div class="agent-last-seen">
-          Último sinal: <strong>${lastSeen}</strong>
+          Last sinal: <strong>${lastSeen}</strong>
         </div>
         <div class="agent-last-event" title="${escapeHtml(lastEvent)}">${escapeHtml(lastEvent.slice(0, 80))}</div>
       </div>
