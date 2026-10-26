@@ -14,3 +14,4 @@ uvicorn[standard]>=0.30.0
 # Predictor (previsão com Chronos)
 torch
 chronos-forecasting
+matplotlib

@@ -1,8 +1,8 @@
 # 🐳 Executando MAS-IFRS (SPADE 4.1.4) com Docker
 
 Esta arquitetura orquestra em containers todos os componentes necessários para a execução completa do ecossistema:
-- **PostgreSQL 15**: Banco de dados relacional (consumos, gerações e baterias pré-inicializadas via `init.sql`).
-- **GraphDB 10.8**: Banco de grafos semântico / RDF Triplestore (Ontotext).
+- **PostgreSQL 17**: Banco de dados relacional. Na inicialização, se o banco estiver vazio, carrega automaticamente a estrutura e os dados do arquivo `DBs/masifrs.sql` (5.735 consumos, 22.122 gerações, baterias, etc.).
+- **GraphDB 10.8**: Banco de grafos semântico / RDF Triplestore (Ontotext). Na inicialização, se o repositório `masIFRS` não existir ou estiver vazio, o serviço cria automaticamente o repositório e carrega a ontologia a partir de `DBs/masIFRS-config.ttl`.
 - **Prosody XMPP**: Servidor de mensageria XMPP configurado para auto-registro livre dos agentes SPADE.
 - **MAS-IFRS Agentes + Monitor HTTPS**: Container Python 3.12 com SPADE 4.1.4, PyTorch, Chronos, agentes e o Monitor Web com certificado TLS.
 
@@ -35,12 +35,11 @@ docker compose down
 |---|---|---|
 | **Monitor Web (HTTPS)** | [https://localhost:8765](https://localhost:8765) | Interface gráfica dos agentes |
 | **GraphDB Workbench** | [http://localhost:7200](http://localhost:7200) | Usuário: `admin` / Senha: `admin` |
-| **PostgreSQL** | `localhost:5432` | Banco: `masifrs` / Usuário: `admin` / Senha: `admin` |
+| **PostgreSQL** | `localhost:5435` (mapeada para `5432` interna) | Banco: `masifrs` / Usuário: `admin` / Senha: `admin` |
 | **XMPP Server (Prosody)** | `localhost:5333` (mapeada para `5222` interna) | Domínio interno: `xmpp` / `localhost` |
 
-> [!TIP]
-> No GraphDB ([http://localhost:7200](http://localhost:7200)), caso ainda não exista o repositório `masIFRS`, crie-o pelo painel:
-> **Data** → **Repositories** → **Create new repository** (ID: `masIFRS`).
+> [!NOTE]
+> O repositório `masIFRS` e a ontologia `DBs/masIFRS-config.ttl` são carregados automaticamente. Você pode navegar visualmente pelas classes e instâncias semânticas pelo GraphDB Workbench em [http://localhost:7200](http://localhost:7200).
 
 ---
 

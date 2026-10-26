@@ -1,7 +1,7 @@
 # ==============================================================================
 # MAS-IFRS (SPADE 4.1.4) — Container dos Agentes e Monitor HTTPS
 # ==============================================================================
-FROM python:3.12-slim
+FROM --platform=linux/amd64 python:3.12-slim
 
 # Evitar prompts interativos no apt e buffers no Python
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -23,6 +23,7 @@ WORKDIR /app
 # Instalar dependências Python em camada separada para cache do Docker
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copiar todo o código da versão SPADE

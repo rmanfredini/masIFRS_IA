@@ -34,7 +34,8 @@ class StorageDataRequest(OneShotBehaviour):
       # DEBUG: print(content)
 
       # Prepare message
-      msg = Message(to=f"meter@localhost/main")
+      domain = self.agent.jid.domain
+      msg = Message(to=f"meter@{domain}/main")
       msg.set_metadata("performative", "request")
       msg.set_metadata("ontology", "cao")
       msg.set_metadata("language", "turtle")

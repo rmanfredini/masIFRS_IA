@@ -39,7 +39,6 @@ def spawn_agents(cfg: dict, only: list) -> dict:
 
     env = os.environ.copy()
     env.update({
-    env.update({
         "XMPP_DOMAIN": os.getenv("XMPP_DOMAIN", str(d.get("domain", "localhost")).strip()),
         "XMPP_PORT": os.getenv("XMPP_PORT", str(d.get("port", 5222)).strip()),
         "AGENT_PASSWORD": os.getenv("AGENT_PASSWORD", str(d.get("password", "secret"))),

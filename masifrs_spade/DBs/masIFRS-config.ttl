@@ -1,0 +1,367 @@
+#
+# RDF4J configuration template for a GraphDB repository
+#
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rep: <http://www.openrdf.org/config/repository#>.
+@prefix sr: <http://www.openrdf.org/config/repository/sail#>.
+@prefix sail: <http://www.openrdf.org/config/sail#>.
+@prefix graphdb: <http://www.ontotext.com/config/graphdb#>.
+
+[] a rep:Repository ;
+    rep:repositoryID "masIFRS" ;
+    rdfs:label "Ontologia IFRS" ;
+    rep:repositoryImpl [
+        rep:repositoryType "graphdb:SailRepository" ;
+        sr:sailImpl [
+            sail:sailType "graphdb:Sail" ;
+
+            graphdb:read-only "false" ;
+
+            # Inference and Validation
+            graphdb:ruleset "rdfsplus-optimized" ;
+            graphdb:disable-sameAs "true" ;
+            graphdb:check-for-inconsistencies "false" ;
+
+            # Indexing
+            graphdb:entity-id-size "32" ;
+            graphdb:enable-context-index "false" ;
+            graphdb:enablePredicateList "true" ;
+            graphdb:enable-fts-index "false" ;
+            graphdb:fts-indexes ("default" "iri") ;
+            graphdb:fts-string-literals-index "default" ;
+            graphdb:fts-iris-index "none" ;
+
+            # Queries and Updates
+            graphdb:query-timeout "0" ;
+            graphdb:throw-QueryEvaluationException-on-timeout "false" ;
+            graphdb:query-limit-results "0" ;
+
+            # Settable in the file but otherwise hidden in the UI and in the RDF4J console
+            graphdb:base-URL "http://example.org/owlim#" ;
+            graphdb:defaultNS "" ;
+            graphdb:imports "" ;
+            graphdb:repository-type "file-repository" ;
+            graphdb:storage-folder "storage" ;
+            graphdb:entity-index-size "10000000" ;
+            graphdb:in-memory-literal-properties "true" ;
+            graphdb:enable-literal-index "true" ;
+        ]
+    ].
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sma: <http://example.org/sma#> . # Sistema Multi Agente
+@prefix inst: <http://example.org/sma/instance#> . # Instâncias
+
+# Ontologia Central
+
+sma:Agent a owl:Class .
+
+sma:Campus a owl:Class .
+sma:UsinaFotovoltaica a owl:Class .
+    
+sma:Armazenador a owl:Class .
+
+sma:Medidor a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+sma:Atuador a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+sma:Preditor a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+sma:Coordenador a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+sma:Visualizador a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+sma:Diretor a owl:Class ;
+    rdfs:subClassOf sma:Agent .
+
+# Nova classe para Regras de Negócio
+sma:RegraDeNegocio a owl:Class ;
+    rdfs:label "Regra de Negócio" ;
+    rdfs:comment "Classe que representa regras de negócio do sistema." .
+
+# Classe Device e subclasses
+sma:Device a owl:Class ;
+    rdfs:label "Dispositivo" ;
+    rdfs:comment "Classe que representa dispositivos físicos controlados pelo sistema" .
+
+sma:SmartMeter a owl:Class ;
+    rdfs:subClassOf sma:Device ;
+    rdfs:label "Medidor Inteligente" ;
+    rdfs:comment "Dispositivo para medição inteligente de energia" .
+
+sma:Inversor a owl:Class ;
+    rdfs:subClassOf sma:Device ;
+    rdfs:label "Inversor" ;
+    rdfs:comment "Dispositivo que converte energia DC para AC" .
+
+sma:ControladorDeCarga a owl:Class ;
+    rdfs:subClassOf sma:Device ;
+    rdfs:label "Controlador de Carga" ;
+    rdfs:comment "Dispositivo que gerencia o carregamento de baterias" .
+
+sma:Chave a owl:Class ;
+    rdfs:subClassOf sma:Device ;
+    rdfs:label "Chave Inteligente" ;
+    rdfs:comment "Dispositivo para chaveamento de circuitos" .
+
+# Propriedades
+sma:temIdentificador a rdf:Property ;
+    rdfs:domain sma:Agent ;
+    rdfs:range xsd:string .
+sma:temIP a rdf:Property ;
+    rdfs:domain sma:Agent ;
+    rdfs:range xsd:string .
+sma:localizadoEm a rdf:Property ;
+    rdfs:domain sma:Agent ;
+    rdfs:range sma:Campus .
+sma:capacidadeGeradora a rdf:Property ;
+    rdfs:domain sma:UsinaFotovoltaica ;
+    rdfs:range xsd:integer . # Capacidade em kW
+sma:estadoUsina a rdf:Property ;
+    rdfs:domain sma:UsinaFotovoltaica ;
+    rdfs:range rdfs:Literal . # "gerando" ou "parada"
+sma:estadoArmazenador a rdf:Property ;
+    rdfs:domain sma:Armazenador ;
+    rdfs:range rdfs:Literal . # "armazenando", "fornecendo", "ligado", "desligado"
+sma:capacidadeArmazenamento a rdf:Property ;
+    rdfs:domain sma:Armazenador ;
+    rdfs:range xsd:integer . # Capacidade em kWh
+sma:cargaAtual a rdf:Property ;
+    rdfs:domain sma:Armazenador ;
+    rdfs:range xsd:integer . # Carga atual em kWh
+sma:politicaGerenciamento a rdf:Property ;
+    rdfs:domain sma:Coordenador ;
+    rdfs:range rdfs:Literal . # Texto com a descrição da política
+sma:vinculadoAUsina a rdf:Property;
+    rdfs:domain sma:Coordenador;
+    rdfs:range sma:UsinaFotovoltaica.
+
+# Propriedades para as regras
+sma:temCondicao a rdf:Property ;
+    rdfs:domain sma:RegraDeNegocio ;
+    rdfs:range xsd:string .
+    
+sma:temAcao a rdf:Property ;
+    rdfs:domain sma:RegraDeNegocio ;
+    rdfs:range xsd:string .
+
+sma:aplicavelA a rdf:Property ;
+    rdfs:domain sma:RegraDeNegocio ;
+    rdfs:range sma:Agent .
+
+# Propriedades dos Devices
+sma:temModelo a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "Modelo" ;
+    rdfs:comment "Modelo ou número de série do dispositivo" .
+
+sma:temFabricante a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "Fabricante" ;
+    rdfs:comment "Fabricante do dispositivo" .
+
+sma:temEnderecoIP a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "Endereço IP" ;
+    rdfs:comment "Endereço IP para comunicação com o dispositivo" .
+
+sma:temProtocolo a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "Protocolo" ;
+    rdfs:comment "Protocolo de comunicação (Modbus, DNP3, etc.)" .
+
+sma:temEstado a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado" ;
+    rdfs:comment "Estado atual do dispositivo (ligado, desligado, em erro, etc.)" .
+
+sma:temUltimaLeitura a rdf:Property ;
+    rdfs:domain sma:SmartMeter ;
+    rdfs:range xsd:float ;
+    rdfs:label "Última Leitura" ;
+    rdfs:comment "Valor da última leitura do medidor" .
+
+sma:temEficiencia a rdf:Property ;
+    rdfs:domain sma:Inversor ;
+    rdfs:range xsd:float ;
+    rdfs:label "Eficiência" ;
+    rdfs:comment "Eficiência do inversor em percentual" .
+
+# Relacionamentos
+sma:controladoPor a rdf:Property ;
+    rdfs:domain sma:Device ;
+    rdfs:range sma:Atuador ;
+    rdfs:label "Controlado Por" ;
+    rdfs:comment "Atuador que controla o dispositivo" .
+
+sma:temComando a rdf:Property ;
+    rdfs:domain sma:Atuador ;
+    rdfs:range sma:Comando ;
+    rdfs:label "Tem Comando" ;
+    rdfs:comment "Comando que pode ser executado pelo atuador" .
+
+# Classe Comando
+sma:Comando a owl:Class ;
+    rdfs:label "Comando" ;
+    rdfs:comment "Classe que representa comandos enviados para dispositivos" .
+
+sma:ComandoLigar a owl:Class ;
+    rdfs:subClassOf sma:Comando ;
+    rdfs:label "Comando Ligar" ;
+    rdfs:comment "Comando para ligar um dispositivo" .
+
+sma:ComandoDesligar a owl:Class ;
+    rdfs:subClassOf sma:Comando ;
+    rdfs:label "Comando Desligar" ;
+    rdfs:comment "Comando para desligar um dispositivo" .
+
+sma:ComandoChavear a owl:Class ;
+    rdfs:subClassOf sma:Comando ;
+    rdfs:label "Comando Chavear" ;
+    rdfs:comment "Comando para chavear um dispositivo" .
+
+# Propriedades dos Comandos
+sma:temParametro a rdf:Property ;
+    rdfs:domain sma:Comando ;
+    rdfs:range xsd:string ;
+    rdfs:label "Parâmetro" ;
+    rdfs:comment "Parâmetro adicional para o comando" .
+
+sma:temHoraEnvio a rdf:Property ;
+    rdfs:domain sma:Comando ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "Hora Envio" ;
+    rdfs:comment "Hora em que o comando foi enviado" .
+
+sma:temStatus a rdf:Property ;
+    rdfs:domain sma:Comando ;
+    rdfs:range xsd:string ;
+    rdfs:label "Status" ;
+    rdfs:comment "Status do comando (enviado, executado, falha)" .
+
+# Restrições (Disjunções)
+#owl:AllDisjointClasses ( sma:Medidor sma:Visualizador sma:Atuador sma:Preditor sma:Diretor sma:Coordenador ) .
+#owl:AllDisjointClasses ( sma:Diretor sma:Coordenador ) .
+
+# Instâncias de exemplo
+inst:Campus1 a sma:Campus .
+inst:Usina1 a sma:UsinaFotovoltaica ;
+    sma:temIdentificador "Usina001" ;
+    sma:temIP "192.168.1.10" ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:capacidadeGeradora 500 ;
+    sma:estadoUsina "gerando" .
+inst:Armazenador1 a sma:Armazenador ;
+    sma:temIdentificador "Bateria001" ;
+    sma:temIP "192.168.1.20" ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:capacidadeArmazenamento 1000 ;
+    sma:cargaAtual 750 ;
+    sma:estadoArmazenador "armazenando" .
+inst:Coordenador1 a sma:Coordenador ;
+    sma:temIdentificador "Coord001" ;
+    sma:temIP "192.168.1.30" ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:politicaGerenciamento "Priorizar o uso da energia solar, descarregar a bateria quando a geração solar for insuficiente." ;
+    sma:vinculadoAUsina inst:Usina1.
+inst:Diretor1 a sma:Diretor ;
+    sma:temIdentificador "Diretor001";
+    sma:temIP "192.168.1.40";
+    sma:localizadoEm inst:Campus1.
+inst:Medidor1 a sma:Medidor;
+    sma:temIdentificador "Medidor001";
+    sma:temIP "192.168.1.50";
+    sma:localizadoEm inst:Campus1.
+inst:Atuador1 a sma:Atuador;
+    sma:temIdentificador "Atuador001";
+    sma:temIP "192.168.1.60";
+    sma:localizadoEm inst:Campus1.
+inst:Preditor1 a sma:Preditor;
+    sma:temIdentificador "Preditor001";
+    sma:temIP "192.168.1.70";
+    sma:localizadoEm inst:Campus1.
+inst:Visualizador1 a sma:Visualizador;
+    sma:temIdentificador "Visualizador001";
+    sma:temIP "192.168.1.80";
+    sma:localizadoEm inst:Campus1.
+
+inst:InversorFV1 a sma:Inversor ;
+    rdfs:label "Inversor Fotovoltaico 1" ;
+    sma:temModelo "SunnyBoy 5000TL" ;
+    sma:temFabricante "SMA" ;
+    sma:temEnderecoIP "192.168.1.101" ;
+    sma:temProtocolo "Modbus TCP" ;
+    sma:temEstado "ligado" ;
+    sma:temEficiencia 97.5 ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:controladoPor inst:Atuador1 .
+
+inst:MedidorEnergia1 a sma:SmartMeter ;
+    rdfs:label "Medidor de Energia 1" ;
+    sma:temModelo "PowerLogic PM5563" ;
+    sma:temFabricante "Schneider Electric" ;
+    sma:temEnderecoIP "192.168.1.102" ;
+    sma:temProtocolo "Modbus TCP" ;
+    sma:temEstado "ligado" ;
+    sma:temUltimaLeitura 42.37 ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:controladoPor inst:Atuador1 .
+
+inst:ControladorBateria1 a sma:ControladorDeCarga ;
+    rdfs:label "Controlador de Bateria 1" ;
+    sma:temModelo "SmartSolar MPPT 150/35" ;
+    sma:temFabricante "Victron Energy" ;
+    sma:temEnderecoIP "192.168.1.103" ;
+    sma:temProtocolo "VE.Direct" ;
+    sma:temEstado "carregando" ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:controladoPor inst:Atuador1 .
+
+inst:ChaveTransferencia1 a sma:Chave ;
+    rdfs:label "Chave de Transferência 1" ;
+    sma:temModelo "ATS022" ;
+    sma:temFabricante "ABB" ;
+    sma:temEnderecoIP "192.168.1.104" ;
+    sma:temProtocolo "DNP3" ;
+    sma:temEstado "rede" ;
+    sma:localizadoEm inst:Campus1 ;
+    sma:controladoPor inst:Atuador1 .
+
+# Instâncias das regras de negócio
+inst:RegraExcessoGeracao a sma:RegraDeNegocio ;
+    rdfs:label "Regra de Excesso de Geração" ;
+    rdfs:comment "Regra para direcionar excesso de geração para o armazenador" ;
+    sma:temCondicao "geracao > consumo" ;
+    sma:temAcao "direcionar_excesso_para_armazenador" ;
+    sma:aplicavelA inst:Atuador1, inst:Coordenador1 .
+
+inst:RegraDeficitNoite a sma:RegraDeNegocio ;
+    rdfs:label "Regra de Déficit Noturno" ;
+    rdfs:comment "Regra para uso do armazenador à noite quando houver déficit" ;
+    sma:temCondicao "consumo > geracao && periodo == noite" ;
+    sma:temAcao "liberar_energia_armazenador" ;
+    sma:aplicavelA inst:Coordenador1 .
+
+# Comandos de exemplo
+inst:ComandoLigarInversor a sma:ComandoLigar ;
+    rdfs:label "Ligar Inversor" ;
+    sma:temParametro "potência=100%" ;
+    sma:temHoraEnvio "2024-03-26T08:30:00"^^xsd:dateTime ;
+    sma:temStatus "executado" .
+
+inst:ComandoChavearRede a sma:ComandoChavear ;
+    rdfs:label "Chavear para Rede" ;
+    sma:temParametro "modo=rede" ;
+    sma:temHoraEnvio "2024-03-26T18:00:00"^^xsd:dateTime ;
+    sma:temStatus "executado" .
+
+# Relação entre Atuador e Comandos
+inst:Atuador1 sma:temComando inst:ComandoLigarInversor, inst:ComandoChavearRede .

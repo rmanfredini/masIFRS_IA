@@ -32,7 +32,7 @@ class StartAgent(PeriodicBehaviour):
             timeout_seconds = 60
             wait_start_time = datetime.now()
             if self.iteracao == 1:
-                while len(agents_alive) < len(expected_agents):
+                while not expected_agents.issubset(agents_alive):
                     if datetime.now() - wait_start_time > timedelta(seconds=timeout_seconds):
                         print(f"❌ TIMEOUT: Atingido o tempo limite de {timeout_seconds}s.")
                         break
@@ -44,9 +44,9 @@ class StartAgent(PeriodicBehaviour):
                                 try:
                                     data = json.loads(msg.body)
                                     agent_type = data.get("agent_type")
-                                    if agent_type not in agents_alive:
-                                        #print(f"   ✅ Confirmação 'alive' recebida de: {agent_type.upper()}")
+                                    if agent_type:
                                         agents_alive.add(agent_type)
+                                        print(f"   ✅ Confirmação 'alive' recebida de: {agent_type.upper()}")
                                 except json.JSONDecodeError as json_err:
                                     print(f"   ⚠️ Erro ao processar JSON na mensagem 'alive': {json_err}")
                                     print(f"   📄 Conteúdo da mensagem: '{msg.body}'")
@@ -56,24 +56,22 @@ class StartAgent(PeriodicBehaviour):
                         print("   ...ainda aguardando...")
                         continue
             
-            # CORREÇÃO: Se os agentes estiverem vivos, ESTE comportamento adiciona os outros.
-            if (agents_alive == expected_agents or self.iteracao > 1): # and not hasattr(self.agent, '_behaviours_added'):
-                
+            # Se os agentes esperados estiverem vivos (ou em iterações subsequentes), adiciona comportamentos operacionais
+            if expected_agents.issubset(agents_alive) or self.iteracao > 1:
                 print("\n🎉 SUCESSO: Todos os agentes confirmaram. Adicionando comportamentos operacionais ao coordinator...")
                 
                 # Marcar que os comportamentos foram adicionados para evitar duplicação
                 self.agent._behaviours_added = True
                 
                 # Usamos self.agent para acessar o coordinator e adicionar comportamentos a ele.
-                #self.agent.add_behaviour(MessageServer())
                 self.agent.add_behaviour(CurrentConsumptionRequest())
                 self.agent.add_behaviour(CurrentGenerationRequest())
                 self.agent.add_behaviour(GenerationForecastRequest())
                 self.agent.add_behaviour(ConsumptionForecastRequest())
                 
                 print("✅ Coordinator está totalmente operacional.")
-            elif agents_alive != expected_agents and self.iteracao == 1:
-                print("\n⚠️ FALHA: Nem todos os agentes confirmaram. O coordinator não será totalmente iniciado.")
+            else:
+                print(f"\n⚠️ FALHA: Nem todos os agentes confirmaram (recebido: {agents_alive}, esperado: {expected_agents}). O coordinator aguardará a próxima iteração.")
             
             self.iteracao += 1
         except Exception as e:

@@ -86,6 +86,22 @@ def setup_logging(agent_name: str) -> None:
     sys.stderr = _StreamToLogger(logging.getLogger("stderr"), logging.ERROR, original_stderr)
 
 
+# Permitir autenticação unencrypted (PLAIN / SCRAM) em redes Docker internas quando verify_security=False
+try:
+    import spade.xmpp_client
+    _orig_xmpp_client_init = spade.xmpp_client.XMPPClient.__init__
+
+    def _patched_xmpp_client_init(self, jid, password, verify_security, auto_register):
+        _orig_xmpp_client_init(self, jid, password, verify_security, auto_register)
+        if not verify_security and "feature_mechanisms" in self.plugin:
+            self["feature_mechanisms"].config["unencrypted_plain"] = True
+            self["feature_mechanisms"].config["unencrypted_scram"] = True
+
+    spade.xmpp_client.XMPPClient.__init__ = _patched_xmpp_client_init
+except Exception:
+    pass
+
+
 def run_agent(agent_cls, name: str = None) -> None:
     """Ponto de entrada de um agente: ``run_agent(meter)`` dentro de ``if __name__ == '__main__'``."""
     name = name or agent_cls.__name__

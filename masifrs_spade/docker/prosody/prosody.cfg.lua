@@ -24,6 +24,7 @@ modules_disabled = { };
 allow_registration = true;
 c2s_require_encryption = false;
 s2s_require_encryption = false;
+allow_unencrypted_plain_auth = true;
 authentication = "internal_plain";
 
 log = {
@@ -33,8 +34,10 @@ log = {
 
 VirtualHost "localhost"
     allow_registration = true;
+    allow_unencrypted_plain_auth = true;
     authentication = "internal_plain";
 
 VirtualHost "xmpp"
     allow_registration = true;
+    allow_unencrypted_plain_auth = true;
     authentication = "internal_plain";

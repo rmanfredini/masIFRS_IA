@@ -54,4 +54,9 @@ echo "📊 Monitor: https://$MONITOR_HOST:$MONITOR_PORT  (certificado autoassina
 MONITOR_PID=$!
 
 cd "$HERE"
+# Inicializar GraphDB se disponível e estiver vazio
+if [ -f "$HERE/docker/graphdb/init_graphdb.sh" ]; then
+  GRAPHDB_BASE_URL="${GRAPHDB_URL:-http://localhost:7200}" sh "$HERE/docker/graphdb/init_graphdb.sh" || true
+fi
+
 "$PY" run_mas.py "$@"

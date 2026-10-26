@@ -1,7 +1,7 @@
 services:
-  # ─── 1. Banco de Dados Relacional (PostgreSQL) ──────────────────────────────
+  # ─── 1. Banco de Dados Relacional (PostgreSQL 17) ───────────────────────────
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     container_name: masifrs-postgres
     restart: unless-stopped
     environment:
@@ -9,10 +9,11 @@ services:
       POSTGRES_USER: ${POSTGRESQL_USER:-admin}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD:-admin}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_HOST_PORT:-5435}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./masifrs_spade/docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./masifrs_spade/docker/postgres/init_and_load.sh:/docker-entrypoint-initdb.d/01-init_and_load.sh:ro
+      - ./masifrs_spade/DBs/masifrs.sql:/opt/dbs/masifrs.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER:-admin} -d ${POSTGRESQL_DATABASE:-masifrs}"]
       interval: 5s
@@ -33,7 +34,25 @@ services:
     networks:
       - masifrs-net
 
-  # ─── 3. Servidor de Mensagens dos Agentes (XMPP Prosody) ────────────────────
+  # ─── 3. Inicializador Automático da Ontologia no GraphDB ─────────────────────
+  graphdb-init:
+    image: curlimages/curl:latest
+    container_name: masifrs-graphdb-init
+    restart: "no"
+    depends_on:
+      - graphdb
+    volumes:
+      - ./masifrs_spade/docker/graphdb/init_graphdb.sh:/init_graphdb.sh:ro
+      - ./masifrs_spade/DBs/masIFRS-config.ttl:/opt/dbs/masIFRS-config.ttl:ro
+    environment:
+      GRAPHDB_BASE_URL: http://graphdb:7200
+      REPO_CONFIG_PATH: /opt/dbs/masIFRS-config.ttl
+      REPO_ID: masIFRS
+    entrypoint: ["/bin/sh", "/init_graphdb.sh"]
+    networks:
+      - masifrs-net
+
+  # ─── 4. Servidor de Mensagens dos Agentes (XMPP Prosody) ────────────────────
   xmpp:
     image: prosody/prosody:latest
     container_name: masifrs-xmpp
@@ -51,8 +70,9 @@ services:
           - xmpp
           - localhost
 
-  # ─── 4. Agentes MAS-IFRS (SPADE 4.1.4) + Monitor Web HTTPS ───────────────────
+  # ─── 5. Agentes MAS-IFRS (SPADE 4.1.4) + Monitor Web HTTPS ───────────────────
   masifrs_spade:
+    platform: linux/amd64
     build:
       context: ./masifrs_spade
       dockerfile: Dockerfile
@@ -61,9 +81,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      graphdb-init:
+        condition: service_completed_successfully
       xmpp:
-        condition: service_started
-      graphdb:
         condition: service_started
     ports:
       - "8765:8765" # Monitor Web HTTPS

@@ -35,8 +35,9 @@ class CurrentConsumptionRequest(OneShotBehaviour):
       # DEBUG: print(content)
 
       # Prepare message
+      domain = self.agent.jid.domain
       msg = Message()
-      msg.to = "meter@localhost/main"
+      msg.to = f"meter@{domain}/main"
       msg.set_metadata("performative", "request")
       msg.set_metadata("ontology", "cao")
       msg.set_metadata("language", "turtle")
