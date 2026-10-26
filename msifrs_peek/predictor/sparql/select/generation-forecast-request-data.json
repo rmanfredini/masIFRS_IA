@@ -1,0 +1,6 @@
+{
+    "message_type": "GenerationForecastRequest",
+    "has_beggining": "{START}",
+    "has_end": "{END}",
+    "timestamp": "2025-07-15T15:52:01.756+01:00"
+}

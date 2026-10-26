@@ -1,0 +1,18 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?dict
+WHERE
+  { _:b0  rdf:type              cao:ActiveRuleRedefinitionInform ;
+          cao:activeRule        ?active_rule ;
+          cao:newAction         _:b1 .
+    _:b1  rdf:type              ?action_type ;
+          ieso:description      ?description ;
+          ieso:actuateOnDevice  ?device .
+    _:b0  time:hasTime          _:b2 .
+    _:b2  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?dt
+    BIND(concat("{\"message_type\":\"ActiveRuleRedefinitionInform\",\"active_rule\":\"", str(?active_rule), "\",\"new_action\": {\"type\":\"", str(?action_type), "\",\"description\":\"", str(?description), "\",\"actuate_on_device\":\"", str(?device), "\"},\"timestamp\":\"", str(?dt), "\"}") AS ?dict)
+  }

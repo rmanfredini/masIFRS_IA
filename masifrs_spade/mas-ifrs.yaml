@@ -1,0 +1,21 @@
+defaults:
+  domain: localhost
+  port: 5333  
+  log_level: INFO
+  # Desabilitar verificação TLS para desenvolvimento local
+  security: none
+  log_folder: logs        # relativo a masifrs_spade/ (lido pelo monitor)
+  password: secret        # senha das contas XMPP (auto-registro)
+
+# Ordem de inicialização: o coordinator sobe primeiro para receber os 'alive'
+agents:
+  coordinator:
+    file: coordinator/coordinator.py
+  meter:
+    file: meter/meter.py
+  predictor:
+    file: predictor/predictor.py
+  director:
+    file: director/director.py
+  actuator:
+    file: actuator/actuator.py

@@ -1,0 +1,22 @@
+PREFIX  br:   <http://my.campus.org/business-rules#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+DELETE {
+  ?generationMeasurementValue ieso:hasLiteralValue ?generationValue .
+  ?consumptionMeasurementValue ieso:hasLiteralValue ?consumptionValue .
+}
+INSERT {
+  ?generationMeasurementValue ieso:hasLiteralValue "<[GENERATION_VALUE]>"^^rdfs:Literal .
+  ?consumptionMeasurementValue ieso:hasLiteralValue "<[CONSUMPTION_VALUE]>"^^rdfs:Literal .
+}
+WHERE
+  { br:generation_data_operand
+              ieso:operandValue     ?generationMeasurementValue .
+    ?generationMeasurementValue
+              ieso:hasLiteralValue  ?generationValue .
+    br:consumption_data_operand
+              ieso:operandValue     ?consumptionMeasurementValue .
+    ?consumptionMeasurementValue
+              ieso:hasLiteralValue  ?consumptionValue
+  }

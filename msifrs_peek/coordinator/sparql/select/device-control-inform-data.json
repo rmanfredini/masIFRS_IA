@@ -1,0 +1,6 @@
+{
+    "message_type": "DeviceControlInform",
+    "controlled_device": "iri:DEVICE_IRI",
+    "controlled_successfully": true,
+    "timestamp": "2025-07-15T19:44:59.707+01:00"
+}

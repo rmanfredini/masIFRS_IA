@@ -1,0 +1,13 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    _:c0 rdf:type cao:CurrentGenerationRequest .
+    _:c0 time:hasTime _:c1 .
+    _:c1 rdf:type time:Instant .
+    _:c1 time:inXSDDateTimeStamp ?dt .
+  }
+WHERE
+  { BIND(now() AS ?dt) }

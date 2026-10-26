@@ -1,0 +1,103 @@
+services:
+  # ─── 1. Banco de Dados Relacional (PostgreSQL) ──────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: masifrs-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DATABASE:-masifrs}
+      POSTGRES_USER: ${POSTGRESQL_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD:-admin}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER:-admin} -d ${POSTGRESQL_DATABASE:-masifrs}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - masifrs-net
+
+  # ─── 2. Banco de Grafos Semântico (GraphDB) ──────────────────────────────────
+  graphdb:
+    image: ontotext/graphdb:10.8.0
+    container_name: masifrs-graphdb
+    restart: unless-stopped
+    ports:
+      - "7200:7200"
+    volumes:
+      - graphdb_data:/opt/graphdb/home
+    networks:
+      - masifrs-net
+
+  # ─── 3. Servidor de Mensagens dos Agentes (XMPP Prosody) ────────────────────
+  xmpp:
+    image: prosody/prosody:latest
+    container_name: masifrs-xmpp
+    restart: unless-stopped
+    ports:
+      - "${XMPP_HOST_PORT:-5333}:5222"
+    volumes:
+      - ./docker/prosody/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro
+    environment:
+      LOCAL: localhost
+      ALLOW_REGISTRATION: "true"
+    networks:
+      masifrs-net:
+        aliases:
+          - xmpp
+          - localhost
+
+  # ─── 4. Agentes MAS-IFRS (SPADE 4.1.4) + Monitor Web HTTPS ───────────────────
+  masifrs_spade:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: masifrs-spade-agents
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      xmpp:
+        condition: service_started
+      graphdb:
+        condition: service_started
+    ports:
+      - "8765:8765" # Monitor Web HTTPS
+    environment:
+      CAMPUS_ID: 1
+      # Conexão com PostgreSQL
+      SERVIDOR_POSTGRESQL: postgres
+      SERVIDOR_POSTGRESQL_PORTA: 5432
+      POSTGRESQL_DATABASE: ${POSTGRESQL_DATABASE:-masifrs}
+      POSTGRESQL_USER: ${POSTGRESQL_USER:-admin}
+      POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD:-admin}
+      # Conexão com GraphDB
+      GRAPHDB_URL: http://graphdb:7200/repositories/masIFRS
+      GRAPHDB_USER: admin
+      GRAPHDB_PASSWORD: admin
+      # Conexão com o Servidor XMPP na rede Docker
+      XMPP_DOMAIN: xmpp
+      XMPP_PORT: 5222
+      AGENT_PASSWORD: secret
+      # Configuração do Monitor Web
+      MONITOR_HOST: "0.0.0.0"
+      MONITOR_PORT: 8765
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - masifrs-net
+
+volumes:
+  postgres_data:
+    name: masifrs_postgres_data
+  graphdb_data:
+    name: masifrs_graphdb_data
+
+networks:
+  masifrs-net:
+    name: masifrs_network
+    driver: bridge

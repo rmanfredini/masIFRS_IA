@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+logs/
+monitor/certs/*.key
+monitor/certs/*.crt
+.venv-spade/
+.env
+.DS_Store

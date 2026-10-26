@@ -1,0 +1,18 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?dict
+WHERE
+  { _:b0  rdf:type              cao:GenerationForecastRequest ;
+          time:hasBeggining     _:b1 .
+    _:b1  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?start .
+    _:b0  time:hasEnd           _:b2 .
+    _:b2  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?end .
+    _:b0  time:hasTime          _:b3 .
+    _:b3  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?dt
+    BIND(concat("{\"message_type\":\"GenerationForecastRequest\",\"has_beggining\":\"", str(?start), "\",\"has_end\":\"", str(?end), "\",\"timestamp\":\"", str(?dt), "\"}") AS ?dict)
+  }

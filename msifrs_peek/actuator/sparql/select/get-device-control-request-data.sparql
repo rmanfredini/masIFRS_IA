@@ -1,0 +1,14 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?dict
+WHERE
+  { _:b0  rdf:type              cao:DeviceControlRequest ;
+          cao:controlDevice     ?device ;
+          cao:controlAction     ?action ;
+          time:hasTime          _:b1 .
+    _:b1  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?dt
+    BIND(concat("{\"message_type\":\"DeviceControlRequest\",\"control_device\":\"", str(?device), "\",\"control_action\":\"", str(?action), "\",\"timestamp\":\"", str(?dt), "\"}") AS ?dict)
+  }

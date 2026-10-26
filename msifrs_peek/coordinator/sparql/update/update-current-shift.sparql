@@ -1,0 +1,29 @@
+PREFIX  br:   <http://my.campus.org/business-rules#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+
+DELETE {
+  br:current_shift ieso:hasLiteralValue ?previousShift .
+}
+INSERT {
+  br:current_shift ieso:hasLiteralValue ?currentShift .
+}
+WHERE
+  { br:day_shift_classes
+              time:hasBeginning  ?dayShiftStart ;
+              time:hasEnd        ?dayShiftEnd .
+    ?dayShiftStart
+              time:inDateTime    _:x0 .
+    _:x0      time:hour          ?startHr ;
+              time:minute        ?startMin .
+    ?dayShiftEnd  time:inDateTime  _:x1 .
+    _:x1      time:hour          ?endHr ;
+              time:minute        ?endMin
+    BIND(now() AS ?now)
+    BIND(if(( ( ( ( hours(?now) < ?startHr ) || ( ( hours(?now) = ?startHr ) && ( minutes(?now) < ?startMin ) ) ) || ( hours(?now) > ?endHr ) ) || ( ( hours(?now) = ?endHr ) && ( minutes(?now) > ?endMin ) ) ), "night"^^rdfs:Literal, "day"^^rdfs:Literal) AS ?currentShift)
+    OPTIONAL
+      { br:current_shift
+                  ieso:hasLiteralValue  ?previousShift
+      }
+  }

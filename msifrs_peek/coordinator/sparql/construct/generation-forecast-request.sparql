@@ -1,0 +1,20 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    _:c0 rdf:type cao:GenerationForecastRequest .
+    _:c0 time:hasBeggining _:c1 .
+    _:c1 rdf:type time:Instant .
+    _:c1 time:inXSDDateTimeStamp "<[START]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasEnd _:c2 .
+    _:c2 rdf:type time:Instant .
+    _:c2 time:inXSDDateTimeStamp "<[END]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasTime _:c3 .
+    _:c3 rdf:type time:Instant .
+    _:c3 time:inXSDDateTimeStamp ?dt .
+  }
+WHERE
+  { BIND(now() AS ?dt) }

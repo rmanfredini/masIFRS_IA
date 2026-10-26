@@ -1,0 +1,13 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+
+SELECT  ?dict
+WHERE
+  { _:b0  rdf:type              cao:ActiveRuleRefuse ;
+          cao:refuseCommunicativeAct  ?refuse_communicative_act ;
+          time:hasTime          _:b1 .
+    _:b1  rdf:type              time:Instant ;
+          time:inXSDDateTimeStamp  ?dt
+    BIND(concat("{\"message_type\":\"ActiveRuleRefuse\",\"refuse_communicative_act\":\"", str(?refuse_communicative_act), "\",\"timestamp\":\"", str(?dt), "\"}") AS ?dict)
+  }

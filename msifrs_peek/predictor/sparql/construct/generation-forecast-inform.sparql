@@ -1,0 +1,31 @@
+PREFIX  cao:  <http://my.campus.org/communicative-acts#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  time: <http://www.w3.org/2006/time#>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    _:c0 rdf:type cao:GenerationForecastInform .
+    _:c0 cao:generationForecast _:c1 .
+    _:c1 rdf:type ieso:Prediction .
+    _:c1 ieso:hasMeasurement _:c2 .
+    _:c2 rdf:type ieso:Measurement .
+    _:c2 ieso:hasDateTime "<[MEASUREMENT_DATETIME]>"^^xsd:dateTime .
+    _:c2 ieso:hasMeasurementValue _:c3 .
+    _:c3 rdf:type ieso:MeasurementValue .
+    _:c3 ieso:hasUnitOfMeasure ieso:KilowattHour .
+    _:c3 ieso:hasLiteralValue "<[GENERATION_FORECAST]>"^^rdfs:Literal .
+    _:c0 time:hasBeginning _:c4 .
+    _:c4 rdf:type time:Instant .
+    _:c4 time:inXSDDateTimeStamp "<[BEGINNING]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasEnd _:c5 .
+    _:c5 rdf:type time:Instant .
+    _:c5 time:inXSDDateTimeStamp "<[END]>"^^xsd:DateTimeStamp .
+    _:c0 time:hasTime _:c6 .
+    _:c6 rdf:type time:Instant .
+    _:c6 time:inXSDDateTimeStamp ?dt .
+  }
+WHERE
+  { BIND(now() AS ?dt) }

@@ -1,0 +1,35 @@
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  ieso: <https://www.gecad.isep.ipp.pt/ieso/v1.1.0/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT  ?dict
+WHERE
+  { ?rule     ieso:id               ?ruleId ;
+              ieso:rulePremiseCondition  ?condition ;
+              ieso:ruleTriggersAction  ?action .
+    ?condition  ieso:id             ?conditionId ;
+              ieso:description      ?conditionDescription ;
+              ieso:leftHandSideOperand  ?leftOperand ;
+              ieso:hasOperator      ?operator ;
+              ieso:rightHandSideOperand  ?rightOperand .
+    ?leftOperand  ieso:id           ?leftOperandId ;
+              ieso:operandUnit      ?leftOperandUnit ;
+              ieso:operandValue     _:b0 .
+    _:b0      ieso:hasLiteralValue  ?leftOperandValue .
+    ?operator  ieso:id              ?operatorId ;
+              ieso:operatorSymbol   ?operatorSymbol .
+    ?rightOperand
+              ieso:id               ?rightOperandId ;
+              ieso:operandUnit      ?rightOperandUnit ;
+              ieso:operandValue     _:b1 .
+    _:b1      ieso:hasLiteralValue  ?rightOperandValue .
+    ?action   ieso:id               ?actionId ;
+              ieso:description      ?actionDescription ;
+              ieso:actionTriggeredByRule  ?rule ;
+              ieso:actuateOnDevice  ?device .
+    ?device   ieso:id               ?deviceId ;
+              ieso:isControlable    ?isControlable ;
+              ieso:hasState         _:b2 .
+    _:b2      ieso:stateStatus      ?stateStatus
+    BIND(if(( ( ( ?operatorId = "greater_than_operator"^^rdfs:Literal ) && ( ?operatorSymbol = ">"^^rdfs:Literal ) ) && ( strdt(str(?leftOperandValue), xsd:float) > strdt(str(?rightOperandValue), xsd:float) ) ), concat("{\"action_id\":\"", str(?actionId), "\",\"action_description\":\"", str(?actionDescription), "\",\"action_triggered_by_rule\":{\"rule_iri\":\"<", str(?rule), ">\",\"rule_premise_condition_description\":\"", str(?conditionDescription), "\"},\"actuate_on_device\":{\"device_id\":\"", str(?deviceId), "\",\"is_controlable\":", str(?isControlable), ",\"current_state\":\"", str(?stateStatus), "\",\"set_state\":\"", lcase(str(?actionDescription)), "\"}}"), "{}") AS ?dict)
+  }

@@ -220,3 +220,8 @@ __marimo__/
 .env
 ./teste
 consolidar_codigo.py
+# Certificados TLS do monitor
+masifrs_spade/monitor/certs/
+
+# SPADE venv
+.venv-spade/
